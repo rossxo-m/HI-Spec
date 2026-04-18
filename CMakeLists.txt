@@ -49,7 +49,9 @@ target_sources(HISpec PRIVATE
     Source/GUI/SpectrumView.cpp
     Source/GUI/BandDetailStrip.cpp
     Source/GUI/PositionChip.cpp
-    Source/GUI/FxModuleCard.cpp)
+    Source/GUI/FxModuleCard.cpp
+    Source/GUI/VowelPad.cpp
+    Source/GUI/VocoderBody.cpp)
 
 target_include_directories(HISpec PRIVATE Source)
 
