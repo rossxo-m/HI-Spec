@@ -53,7 +53,9 @@ target_sources(HISpec PRIVATE
     Source/GUI/VowelPad.cpp
     Source/GUI/VocoderBody.cpp
     Source/GUI/FilterResponsePlot.cpp
-    Source/GUI/SpectralFilterBody.cpp)
+    Source/GUI/SpectralFilterBody.cpp
+    Source/GUI/HeaderBar.cpp
+    Source/GUI/Breadcrumb.cpp)
 
 target_include_directories(HISpec PRIVATE Source)
 
