@@ -21,6 +21,7 @@ add_executable(hispec_tests
     snapshot_fx_card.cpp
     test_vowel_pad.cpp
     snapshot_vocoder.cpp
+    snapshot_filter.cpp
     ${CMAKE_SOURCE_DIR}/Source/Parameters/ParameterLayout.cpp
     ${CMAKE_SOURCE_DIR}/Source/DSP/HilbertFilterbank.cpp
     ${CMAKE_SOURCE_DIR}/Source/DSP/SpectralDelay.cpp
@@ -36,7 +37,9 @@ add_executable(hispec_tests
     ${CMAKE_SOURCE_DIR}/Source/GUI/PositionChip.cpp
     ${CMAKE_SOURCE_DIR}/Source/GUI/FxModuleCard.cpp
     ${CMAKE_SOURCE_DIR}/Source/GUI/VowelPad.cpp
-    ${CMAKE_SOURCE_DIR}/Source/GUI/VocoderBody.cpp)
+    ${CMAKE_SOURCE_DIR}/Source/GUI/VocoderBody.cpp
+    ${CMAKE_SOURCE_DIR}/Source/GUI/FilterResponsePlot.cpp
+    ${CMAKE_SOURCE_DIR}/Source/GUI/SpectralFilterBody.cpp)
 
 target_include_directories(hispec_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/Source)

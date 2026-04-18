@@ -51,7 +51,9 @@ target_sources(HISpec PRIVATE
     Source/GUI/PositionChip.cpp
     Source/GUI/FxModuleCard.cpp
     Source/GUI/VowelPad.cpp
-    Source/GUI/VocoderBody.cpp)
+    Source/GUI/VocoderBody.cpp
+    Source/GUI/FilterResponsePlot.cpp
+    Source/GUI/SpectralFilterBody.cpp)
 
 target_include_directories(HISpec PRIVATE Source)
 
