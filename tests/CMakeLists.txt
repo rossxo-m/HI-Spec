@@ -17,6 +17,8 @@ add_executable(hispec_tests
     snapshot_lookandfeel.cpp
     snapshot_spectrum.cpp
     snapshot_band_strip.cpp
+    test_position_chip.cpp
+    snapshot_fx_card.cpp
     ${CMAKE_SOURCE_DIR}/Source/Parameters/ParameterLayout.cpp
     ${CMAKE_SOURCE_DIR}/Source/DSP/HilbertFilterbank.cpp
     ${CMAKE_SOURCE_DIR}/Source/DSP/SpectralDelay.cpp
@@ -28,7 +30,9 @@ add_executable(hispec_tests
     ${CMAKE_SOURCE_DIR}/Source/GUI/GooFilterEffect.cpp
     ${CMAKE_SOURCE_DIR}/Source/GUI/LookAndFeel_HISpec.cpp
     ${CMAKE_SOURCE_DIR}/Source/GUI/SpectrumView.cpp
-    ${CMAKE_SOURCE_DIR}/Source/GUI/BandDetailStrip.cpp)
+    ${CMAKE_SOURCE_DIR}/Source/GUI/BandDetailStrip.cpp
+    ${CMAKE_SOURCE_DIR}/Source/GUI/PositionChip.cpp
+    ${CMAKE_SOURCE_DIR}/Source/GUI/FxModuleCard.cpp)
 
 target_include_directories(hispec_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/Source)
