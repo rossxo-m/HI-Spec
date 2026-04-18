@@ -1,0 +1,23 @@
+build/
+cmake-build-*/
+.idea/
+.vscode/
+*.user
+JuceLibraryCode/
+Builds/
+_deps/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Local env
+.env
+.env.local
