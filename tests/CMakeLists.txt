@@ -8,7 +8,9 @@ FetchContent_MakeAvailable(Catch2)
 add_executable(hispec_tests
     main.cpp
     ParameterLayoutTests.cpp
-    ${CMAKE_SOURCE_DIR}/Source/Parameters/ParameterLayout.cpp)
+    HilbertFilterbankTests.cpp
+    ${CMAKE_SOURCE_DIR}/Source/Parameters/ParameterLayout.cpp
+    ${CMAKE_SOURCE_DIR}/Source/DSP/HilbertFilterbank.cpp)
 
 target_include_directories(hispec_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/Source)
