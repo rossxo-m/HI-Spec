@@ -12,11 +12,13 @@ add_executable(hispec_tests
     SpectralDelayTests.cpp
     VocoderTests.cpp
     SpectralFilterTests.cpp
+    GraphWiringTests.cpp
     ${CMAKE_SOURCE_DIR}/Source/Parameters/ParameterLayout.cpp
     ${CMAKE_SOURCE_DIR}/Source/DSP/HilbertFilterbank.cpp
     ${CMAKE_SOURCE_DIR}/Source/DSP/SpectralDelay.cpp
     ${CMAKE_SOURCE_DIR}/Source/DSP/Vocoder.cpp
-    ${CMAKE_SOURCE_DIR}/Source/DSP/SpectralFilter.cpp)
+    ${CMAKE_SOURCE_DIR}/Source/DSP/SpectralFilter.cpp
+    ${CMAKE_SOURCE_DIR}/Source/DSP/Graph.cpp)
 
 target_include_directories(hispec_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/Source)

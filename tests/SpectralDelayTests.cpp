@@ -8,6 +8,37 @@
 
 using Catch::Approx;
 
+TEST_CASE("SpectralDelay with delay=0 still produces non-zero output", "[dsp][delay]")
+{
+    constexpr double sr = 48000.0;
+    hispec::SpectralDelay sd;
+    sd.prepare ({ sr, 32, 1, 2000.0f });
+
+    std::vector<hispec::SpectralDelay::BandParams> bp (1);
+    bp[0].timeMs = 0.0f;
+    bp[0].fb     = 0.0f;
+    bp[0].gainDb = 0.0f;
+    bp[0].pan    = 0.0f;
+    sd.setBandParams (bp);
+    sd.setBandCenterFrequencies (std::vector<float> { 500.0f });
+
+    std::vector<hispec::ComplexBuffer> bands (1);
+
+    // Run a few blocks so the internal Lagrange history has time to fill.
+    float maxAbs = 0.0f;
+    for (int block = 0; block < 3; ++block)
+    {
+        bands[0].setSize (1, 32, true);
+        for (int i = 0; i < 32; ++i)
+            bands[0].getRealWrite (0)[i] = 0.1f * static_cast<float> (block * 32 + i + 1);
+        sd.process (bands);
+        for (int i = 0; i < 32; ++i)
+            maxAbs = juce::jmax (maxAbs, std::abs (bands[0].getRealRead (0)[i]));
+    }
+    INFO ("delay=0 maxAbs = " << maxAbs);
+    REQUIRE (maxAbs > 0.1f);
+}
+
 TEST_CASE("SpectralDelay echoes an impulse at the requested time (single band)", "[dsp][delay]")
 {
     constexpr double sr = 48000.0;

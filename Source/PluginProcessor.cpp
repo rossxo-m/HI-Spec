@@ -13,12 +13,18 @@ HISpecAudioProcessor::HISpecAudioProcessor()
 {
 }
 
-void HISpecAudioProcessor::prepareToPlay (double /*sampleRate*/, int /*samplesPerBlock*/)
+void HISpecAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    Graph::ProcessSpec spec;
+    spec.sampleRate   = sampleRate;
+    spec.maxBlockSize = samplesPerBlock;
+    graph.prepare (spec);
+    setLatencySamples (graph.getLatencySamples());
 }
 
 void HISpecAudioProcessor::releaseResources()
 {
+    graph.reset();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -44,7 +50,7 @@ void HISpecAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // Pass-through for now; DSP wired in Task 6.
+    graph.process (buffer, apvts);
 }
 
 juce::AudioProcessorEditor* HISpecAudioProcessor::createEditor()

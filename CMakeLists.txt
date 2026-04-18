@@ -36,7 +36,12 @@ juce_add_plugin(HISpec
 target_sources(HISpec PRIVATE
     Source/PluginProcessor.cpp
     Source/PluginEditor.cpp
-    Source/Parameters/ParameterLayout.cpp)
+    Source/Parameters/ParameterLayout.cpp
+    Source/DSP/HilbertFilterbank.cpp
+    Source/DSP/SpectralDelay.cpp
+    Source/DSP/Vocoder.cpp
+    Source/DSP/SpectralFilter.cpp
+    Source/DSP/Graph.cpp)
 
 target_include_directories(HISpec PRIVATE Source)
 

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <juce_audio_processors/juce_audio_processors.h>
+#include <memory>
+#include "DSP/Graph.h"
 
 namespace hispec
 {
@@ -41,8 +43,11 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    Graph& getGraph() noexcept { return graph; }
+
 private:
     juce::AudioProcessorValueTreeState apvts;
+    Graph graph;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HISpecAudioProcessor)
 };

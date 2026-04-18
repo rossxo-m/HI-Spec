@@ -95,8 +95,11 @@ void SpectralDelay::process (std::vector<ComplexBuffer>& bands)
         const int numSamples = buf.getNumSamples();
         const int chs        = juce::jmin (2, buf.getNumChannels());
 
+        // Lagrange3rd needs at least 2 samples of delay to produce valid output.
+        // Smaller values quietly return 0 from the JUCE delay line — clamp so
+        // "delay = 0" still produces a through-path (imperceptible 2-sample delay).
         const float delaySamples = juce::jlimit (
-            0.0f,
+            2.0f,
             static_cast<float> (maxDelayMs * 0.001 * sampleRate),
             par.timeMs * 0.001f * static_cast<float> (sampleRate));
 
