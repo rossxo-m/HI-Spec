@@ -9,8 +9,13 @@ HISpecAudioProcessor::HISpecAudioProcessor()
     : AudioProcessor (BusesProperties()
                           .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                           .withOutput ("Output", juce::AudioChannelSet::stereo(), true)),
-      apvts (*this, nullptr, "Params", createParameterLayout())
+      apvts (*this, nullptr, "Params", createParameterLayout()),
+      presets (apvts)
 {
+    // Seed UI state with sensible defaults so it round-trips cleanly.
+    uiState.setProperty ("currentPage", "spectrum", nullptr);
+    uiState.setProperty ("selectedBand", -1, nullptr);
+    presets.attachUIState (uiState);
 }
 
 void HISpecAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
@@ -60,15 +65,12 @@ juce::AudioProcessorEditor* HISpecAudioProcessor::createEditor()
 
 void HISpecAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    if (auto xml = apvts.copyState().createXml())
-        copyXmlToBinary (*xml, destData);
+    presets.getStateInformation (destData);
 }
 
 void HISpecAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    if (auto xml = getXmlFromBinary (data, sizeInBytes))
-        if (xml->hasTagName (apvts.state.getType()))
-            apvts.replaceState (juce::ValueTree::fromXml (*xml));
+    presets.setStateInformation (data, sizeInBytes);
 }
 
 } // namespace hispec

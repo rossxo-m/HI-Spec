@@ -3,6 +3,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <memory>
 #include "DSP/Graph.h"
+#include "State/PresetManager.h"
 
 namespace hispec
 {
@@ -44,10 +45,14 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     Graph& getGraph() noexcept { return graph; }
+    PresetManager& getPresetManager() noexcept { return presets; }
+    juce::ValueTree& getUIState() noexcept { return uiState; }
 
 private:
     juce::AudioProcessorValueTreeState apvts;
     Graph graph;
+    juce::ValueTree uiState { "UIState" };
+    PresetManager presets;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HISpecAudioProcessor)
 };

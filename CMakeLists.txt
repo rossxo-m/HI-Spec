@@ -41,7 +41,8 @@ target_sources(HISpec PRIVATE
     Source/DSP/SpectralDelay.cpp
     Source/DSP/Vocoder.cpp
     Source/DSP/SpectralFilter.cpp
-    Source/DSP/Graph.cpp)
+    Source/DSP/Graph.cpp
+    Source/State/PresetManager.cpp)
 
 target_include_directories(HISpec PRIVATE Source)
 
