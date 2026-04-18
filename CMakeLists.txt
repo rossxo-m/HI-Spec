@@ -45,7 +45,8 @@ target_sources(HISpec PRIVATE
     Source/State/PresetManager.cpp
     Source/GUI/Assets/chrome_gradient.cpp
     Source/GUI/GooFilterEffect.cpp
-    Source/GUI/LookAndFeel_HISpec.cpp)
+    Source/GUI/LookAndFeel_HISpec.cpp
+    Source/GUI/SpectrumView.cpp)
 
 target_include_directories(HISpec PRIVATE Source)
 
