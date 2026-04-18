@@ -14,13 +14,17 @@ add_executable(hispec_tests
     SpectralFilterTests.cpp
     GraphWiringTests.cpp
     StateRoundtripTests.cpp
+    snapshot_lookandfeel.cpp
     ${CMAKE_SOURCE_DIR}/Source/Parameters/ParameterLayout.cpp
     ${CMAKE_SOURCE_DIR}/Source/DSP/HilbertFilterbank.cpp
     ${CMAKE_SOURCE_DIR}/Source/DSP/SpectralDelay.cpp
     ${CMAKE_SOURCE_DIR}/Source/DSP/Vocoder.cpp
     ${CMAKE_SOURCE_DIR}/Source/DSP/SpectralFilter.cpp
     ${CMAKE_SOURCE_DIR}/Source/DSP/Graph.cpp
-    ${CMAKE_SOURCE_DIR}/Source/State/PresetManager.cpp)
+    ${CMAKE_SOURCE_DIR}/Source/State/PresetManager.cpp
+    ${CMAKE_SOURCE_DIR}/Source/GUI/Assets/chrome_gradient.cpp
+    ${CMAKE_SOURCE_DIR}/Source/GUI/GooFilterEffect.cpp
+    ${CMAKE_SOURCE_DIR}/Source/GUI/LookAndFeel_HISpec.cpp)
 
 target_include_directories(hispec_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/Source)
@@ -37,6 +41,8 @@ target_link_libraries(hispec_tests
         juce::juce_audio_processors
         juce::juce_audio_utils
         juce::juce_dsp
+        juce::juce_gui_basics
+        juce::juce_graphics
         juce::juce_recommended_config_flags
         juce::juce_recommended_warning_flags)
 

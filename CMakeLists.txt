@@ -42,7 +42,10 @@ target_sources(HISpec PRIVATE
     Source/DSP/Vocoder.cpp
     Source/DSP/SpectralFilter.cpp
     Source/DSP/Graph.cpp
-    Source/State/PresetManager.cpp)
+    Source/State/PresetManager.cpp
+    Source/GUI/Assets/chrome_gradient.cpp
+    Source/GUI/GooFilterEffect.cpp
+    Source/GUI/LookAndFeel_HISpec.cpp)
 
 target_include_directories(HISpec PRIVATE Source)
 
