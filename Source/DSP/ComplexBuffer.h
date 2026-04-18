@@ -18,6 +18,15 @@ struct ComplexBuffer
     {
         real.setSize (numChannels, numSamples, false, clear, true);
         imag.setSize (numChannels, numSamples, false, clear, true);
+        if (clear)
+        {
+            // juce::AudioBuffer::setSize does NOT clear existing channel data
+            // when newSize == oldSize (clearExtraSpace only applies to newly
+            // allocated memory). Force-clear here so callers get deterministic
+            // behaviour regardless of prior size.
+            real.clear();
+            imag.clear();
+        }
     }
 
     int getNumChannels() const noexcept { return real.getNumChannels(); }
