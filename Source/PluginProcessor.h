@@ -11,6 +11,8 @@ public:
     HISpecAudioProcessor();
     ~HISpecAudioProcessor() override = default;
 
+    juce::AudioProcessorValueTreeState& getAPVTS() noexcept { return apvts; }
+
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
@@ -40,6 +42,8 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    juce::AudioProcessorValueTreeState apvts;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HISpecAudioProcessor)
 };
 

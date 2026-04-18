@@ -6,14 +6,24 @@ FetchContent_Declare(Catch2
 FetchContent_MakeAvailable(Catch2)
 
 add_executable(hispec_tests
-    main.cpp)
+    main.cpp
+    ParameterLayoutTests.cpp
+    ${CMAKE_SOURCE_DIR}/Source/Parameters/ParameterLayout.cpp)
 
 target_include_directories(hispec_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/Source)
 
+target_compile_definitions(hispec_tests PRIVATE
+    JUCE_STANDALONE_APPLICATION=1
+    JUCE_WEB_BROWSER=0
+    JUCE_USE_CURL=0
+    JUCE_MODAL_LOOPS_PERMITTED=0)
+
 target_link_libraries(hispec_tests
     PRIVATE
         Catch2::Catch2WithMain
+        juce::juce_audio_processors
+        juce::juce_audio_utils
         juce::juce_dsp
         juce::juce_recommended_config_flags
         juce::juce_recommended_warning_flags)

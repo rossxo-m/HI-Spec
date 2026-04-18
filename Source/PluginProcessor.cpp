@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "Parameters/ParameterLayout.h"
 
 namespace hispec
 {
@@ -7,7 +8,8 @@ namespace hispec
 HISpecAudioProcessor::HISpecAudioProcessor()
     : AudioProcessor (BusesProperties()
                           .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                          .withOutput ("Output", juce::AudioChannelSet::stereo(), true))
+                          .withOutput ("Output", juce::AudioChannelSet::stereo(), true)),
+      apvts (*this, nullptr, "Params", createParameterLayout())
 {
 }
 
@@ -50,12 +52,17 @@ juce::AudioProcessorEditor* HISpecAudioProcessor::createEditor()
     return new HISpecAudioProcessorEditor (*this);
 }
 
-void HISpecAudioProcessor::getStateInformation (juce::MemoryBlock&)
+void HISpecAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
+    if (auto xml = apvts.copyState().createXml())
+        copyXmlToBinary (*xml, destData);
 }
 
-void HISpecAudioProcessor::setStateInformation (const void*, int)
+void HISpecAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
+    if (auto xml = getXmlFromBinary (data, sizeInBytes))
+        if (xml->hasTagName (apvts.state.getType()))
+            apvts.replaceState (juce::ValueTree::fromXml (*xml));
 }
 
 } // namespace hispec

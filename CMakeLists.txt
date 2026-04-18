@@ -35,7 +35,8 @@ juce_add_plugin(HISpec
 
 target_sources(HISpec PRIVATE
     Source/PluginProcessor.cpp
-    Source/PluginEditor.cpp)
+    Source/PluginEditor.cpp
+    Source/Parameters/ParameterLayout.cpp)
 
 target_include_directories(HISpec PRIVATE Source)
 
