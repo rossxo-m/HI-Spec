@@ -31,7 +31,7 @@ juce_add_plugin(HISpec
     NEEDS_MIDI_INPUT FALSE
     NEEDS_MIDI_OUTPUT FALSE
     IS_SYNTH FALSE
-    COPY_PLUGIN_AFTER_BUILD FALSE)
+    COPY_PLUGIN_AFTER_BUILD TRUE)
 
 target_sources(HISpec PRIVATE
     Source/PluginProcessor.cpp
