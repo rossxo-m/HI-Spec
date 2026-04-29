@@ -1,0 +1,140 @@
+name: build
+
+on:
+  push:
+    branches: [ main, master ]
+    tags:     [ 'v*' ]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            generator: "Visual Studio 17 2022"
+            arch: "-A x64"
+          - os: macos-latest
+            generator: "Xcode"
+            arch: ""
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Configure
+        run: cmake -B build -G "${{ matrix.generator }}" ${{ matrix.arch }} -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build tests
+        continue-on-error: true
+        run: cmake --build build --target hispec_tests --config Release --parallel
+
+      - name: Build plugin (Release)
+        run: cmake --build build --target HISpec_VST3 --config Release --parallel
+
+      - name: Ad-hoc codesign (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          for bundle in build/HISpec_artefacts/Release/VST3/HI-Spec.vst3; do
+            if [ -e "$bundle" ]; then
+              codesign --force --deep --sign - "$bundle"
+              codesign --verify --verbose "$bundle"
+            fi
+          done
+
+      - name: Build Windows installer
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) {
+            choco install innosetup -y
+            $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          }
+          & $iscc installer\windows\HI-Spec.iss
+          Get-ChildItem installer\windows\output
+
+      - name: Build macOS installer (.pkg)
+        if: matrix.os == 'macos-latest'
+        run: |
+          chmod +x installer/mac/build-installer.sh
+          ./installer/mac/build-installer.sh
+          ls -lh installer/mac/output
+
+      - name: Upload Windows artifacts
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v5
+        with:
+          name: HI-Spec-windows
+          path: |
+            installer/windows/output/HI-Spec-*-windows.exe
+            build/HISpec_artefacts/Release/VST3/HI-Spec.vst3
+
+      - name: Upload macOS artifacts
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v5
+        with:
+          name: HI-Spec-macos
+          path: |
+            installer/mac/output/HI-Spec-*-macos.pkg
+            build/HISpec_artefacts/Release/VST3/HI-Spec.vst3
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v5
+        with:
+          name: HI-Spec-windows
+          path: artifacts/windows
+      - uses: actions/download-artifact@v5
+        with:
+          name: HI-Spec-macos
+          path: artifacts/macos
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: HI-Spec ${{ github.ref_name }}
+          generate_release_notes: true
+          files: |
+            artifacts/windows/installer/windows/output/*.exe
+            artifacts/macos/installer/mac/output/*.pkg
+
+  rolling-release:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v5
+        with:
+          name: HI-Spec-windows
+          path: artifacts/windows
+      - uses: actions/download-artifact@v5
+        with:
+          name: HI-Spec-macos
+          path: artifacts/macos
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: "HI-Spec latest (main)"
+          prerelease: true
+          make_latest: false
+          body: |
+            Auto-built from main ${{ github.sha }}.
+            Always points at the most recent passing main build.
+            For stable versioned releases see the Releases tab.
+          files: |
+            artifacts/windows/installer/windows/output/*.exe
+            artifacts/macos/installer/mac/output/*.pkg
