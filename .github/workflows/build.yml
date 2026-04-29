@@ -1,10 +1,11 @@
 name: build
 
 on:
+  # Auto-build is OFF to control GitHub Actions usage. To run a build:
+  #   - Push a v* tag: triggers tagged release with installers
+  #   - Manually dispatch: GitHub UI > Actions > Run workflow, or `gh workflow run build.yml`
   push:
-    branches: [ main, master ]
-    tags:     [ 'v*' ]
-  pull_request:
+    tags: [ 'v*' ]
   workflow_dispatch:
 
 env:
@@ -109,7 +110,7 @@ jobs:
 
   rolling-release:
     needs: build
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       contents: write
